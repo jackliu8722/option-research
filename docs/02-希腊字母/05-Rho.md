@@ -23,7 +23,7 @@ updated: 2026-06-10
 
 $$ \rho = \frac{\partial V}{\partial r}\quad(\text{通常按"每 1\%"报价}) $$
 
-- **Call 的 ρ > 0**：`r` 升 → 远期 `F=S·e^{rτ}` 升 → 利好 Call。
+- **Call 的 ρ > 0**：`r` 升 → 远期 $F=S\cdot e^{r\tau}$ 升 → 利好 Call。
 - **Put 的 ρ < 0**：`r` 升利空 Put。
 - 与 [00/04 比较静态表](../00-基础概念/04-期权价格的直觉.md) 的 `r↑` 行一致。
 
