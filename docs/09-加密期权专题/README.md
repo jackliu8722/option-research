@@ -6,6 +6,7 @@
 - [01 · 币本位与反向合约](./01-币本位与反向合约.md) — inverse 盈亏机制、BTC/USD 双口径、Delta 口径坑
 - [02 · 永续合约与资金费率对冲](./02-永续合约与资金费率对冲.md) — 用永续做 Delta 对冲、funding 成本/收益、合成头寸
 - [03 · 无风险利率 r 的选取](./03-无风险利率r的选取.md) — r 即持有成本/基差，FX 双利率框架，从市场远期反推 r
+- [04 · DVOL 与加密波动率特征](./04-DVOL与加密波动率特征.md) — DVOL vs VIX 量级、skew 翻转、期限结构、up-vol、清算级联
 
 ## 计划笔记
 - 交易所与产品全景：Deribit（主导）、OKX、Binance、Bybit；链上 Lyra/Aevo/Premia
