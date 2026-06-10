@@ -69,6 +69,7 @@ $$ |\Delta S|_{\text{平衡}} \approx S\,\sigma\sqrt{\tfrac{1}{365}} = \text{隐
 ## 5. 算例
 
 BTC `S=60,000`，IV `σ=80%`（年化）。隐含日波动：
+
 $$ 60{,}000 \times 0.80 \times \sqrt{1/365} \approx 60{,}000 \times 0.0419 \approx \$2{,}513 $$
 
 - 即市场"定价"BTC 每天约动 \$2,513。**你持多头 Gamma：当天实际波动 > \$2,513 就跑赢 Theta，反之被时间吃掉。**
