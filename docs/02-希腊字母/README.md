@@ -6,6 +6,7 @@
 - [01 · Delta](./01-Delta.md) — 方向敏感度/对冲比率/实值概率三重身份、组合 Delta 与中性（含 BTC 算例）
 - [02 · Gamma](./02-Gamma.md) — Delta 变化率/凸性、½Γ(ΔS)²、Gamma scalping、加密 Gamma 风险
 - [03 · Theta](./03-Theta.md) — 时间衰减、Θ≈−½σ²S²Γ、已实现 vs 隐含波动对决（含日波动算例）
+- [04 · Vega](./04-Vega.md) — 对 IV 的敏感度、Vega vs Gamma 期限对比、vol crush、曲面风险（含算例）
 - [07 · 币本位希腊字母的单位与换算](./07-币本位希腊字母的单位与换算.md) — USD 口径 vs 币口径单位对比、Theta/Vega/Rho 除以 S、Delta/Gamma 的 inverse 修正（含换算算例）
 
 ## 计划笔记
