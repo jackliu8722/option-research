@@ -4,6 +4,7 @@
 
 ## 已完成
 - [01 · Delta](./01-Delta.md) — 方向敏感度/对冲比率/实值概率三重身份、组合 Delta 与中性（含 BTC 算例）
+- [02 · Gamma](./02-Gamma.md) — Delta 变化率/凸性、½Γ(ΔS)²、Gamma scalping、加密 Gamma 风险
 
 ## 计划笔记
 - Delta：方向敞口；与对冲的关系（✅ 见上）
