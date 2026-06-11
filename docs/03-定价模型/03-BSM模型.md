@@ -58,7 +58,9 @@ $$ \ln S_T \sim \mathcal{N}\!\Big(\ln S_0 + (r - q - \tfrac{1}{2}\sigma^2)\tau,\
 
 把期望拆成两块：
 
-$$ C = e^{-r\tau}\Big(\underbrace{\mathbb{E}^{Q}[S_T\,\mathbf{1}_{S_T>K}]}_{\text{得到标的的那部分}} - \underbrace{K\,\mathbb{E}^{Q}[\mathbf{1}_{S_T>K}]}_{\text{付出行权价的那部分}}\Big) $$
+$$ C = e^{-r\tau}\Big(\underbrace{\mathbb{E}^{Q}[S_T\,\mathbf{1}_{S_T>K}]}_{\text{asset leg}} - \underbrace{K\,\mathbb{E}^{Q}[\mathbf{1}_{S_T>K}]}_{\text{strike leg}}\Big) $$
+
+（第一块=拿到标的的那部分，第二块=付出行权价的那部分。）
 
 - **第二块**：$\mathbb{E}^Q[\mathbf{1}_{S_T>K}] = Q(S_T>K) = N(d_2)$。把对数正态的 `P(S_T>K)` 标准化即得 `d₂`。
 - **第一块**：含 `S_T` 的加权，需做一次测度/变量变换，结果 $\mathbb{E}^Q[S_T \mathbf{1}_{S_T>K}] = S_0 e^{(r-q)\tau} N(d_1)$，多出的 `σ²` 把 `d₂` 抬成 $d_1 = d_2 + \sigma\sqrt{\tau}$。

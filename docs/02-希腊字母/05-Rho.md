@@ -21,7 +21,7 @@ updated: 2026-06-10
 
 **Rho（ρ）= 无风险利率变动 1 个百分点时，期权价格的变动量。**
 
-$$ \rho = \frac{\partial V}{\partial r}\quad(\text{通常按"每 1\%"报价}) $$
+$$ \rho = \frac{\partial V}{\partial r}\quad(\text{per 1\% rate}) $$
 
 - **Call 的 ρ > 0**：`r` 升 → 远期 $F=S\cdot e^{r\tau}$ 升 → 利好 Call。
 - **Put 的 ρ < 0**：`r` 升利空 Put。
@@ -52,7 +52,7 @@ $$ \rho = \frac{\partial V}{\partial r}\quad(\text{通常按"每 1\%"报价}) $$
 
 长一张到期较远的 BTC Call，`ρ = +\$50 / 1%`（示意）。若市场隐含 `r`（由基差反推）从 8% 升到 12%（+4 点）：
 
-$$ \text{Rho 盈亏} \approx +50 \times 4 = +\$200 $$
+$$ \text{Rho P\&L} \approx 50 \times 4 = +\$200 $$
 
 - 相比同仓位的 Vega（一次 vol crush 可达数千美元，见 [04-Vega](./04-Vega.md)）和 Delta，这 \$200 通常是小项。
 - 但在**跨期/卖远期/平价套利**类策略里，基差（=`r`）取错或剧变会直接改变理论价，此时不能忽略。

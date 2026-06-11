@@ -20,7 +20,9 @@ updated: 2026-06-10
 
 **Delta（Δ）= 标的价格变动 1 个单位时，期权价格的变动量。**
 
-$$ \Delta = \frac{\partial V}{\partial S} \approx \frac{\text{期权价变化}}{\text{标的价变化}} $$
+$$ \Delta = \frac{\partial V}{\partial S} \approx \frac{\Delta V}{\Delta S} $$
+
+即"期权价变化 / 标的价变化"。
 
 - Call 的 Δ 为正（标的涨、Call 涨）。
 - Put 的 Δ 为负（标的涨、Put 跌）。
@@ -57,7 +59,9 @@ $$ \Delta = \frac{\partial V}{\partial S} \approx \frac{\text{期权价变化}}{
 
 多个头寸的 Delta **可直接相加**（这是 Delta 最好用的性质）：
 
-$$ \Delta_{\text{组合}} = \sum_i (\text{数量}_i \times \Delta_i) $$
+$$ \Delta_{\text{port}} = \sum_i n_i\,\Delta_i $$
+
+其中 $n_i$ 为各腿数量（$\Delta_{\text{port}}$ = 组合净 Delta）。
 
 - 净 Δ > 0 → 整体偏多；< 0 → 偏空；= 0 → **Delta 中性**（瞬时对标的方向不敏感）。
 - Delta 中性**不是一劳永逸**：标的一动，各腿 Δ 变化（Gamma 作用）→ 净 Δ 漂移 → 要再对冲。

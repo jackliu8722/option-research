@@ -21,7 +21,7 @@ updated: 2026-06-10
 
 **Theta（Θ）= 其它不变、时间过去 1 天，期权价格的变化量。**
 
-$$ \Theta = \frac{\partial V}{\partial t}\quad(\text{通常按"每天"报价}) $$
+$$ \Theta = \frac{\partial V}{\partial t}\quad(\text{per day}) $$
 
 - **买方 Θ < 0**：每天损耗时间价值（付租）。
 - **卖方 Θ > 0**：每天收时间价值（收租）。
@@ -54,11 +54,11 @@ $$ \Theta \approx -\tfrac{1}{2}\,\sigma^2 S^2\,\Gamma $$
 
 把 [Gamma 凸性收益 ½Γ(ΔS)²](./02-Gamma.md) 和每天的 Theta 租金放一起，多头 Gamma 仓位每天的盈亏大致是：
 
-$$ \text{日盈亏} \approx \underbrace{\tfrac{1}{2}\Gamma(\Delta S)^2}_{\text{实际波动贡献}} \;-\; \underbrace{|\Theta|}_{\text{付的租金}} $$
+$$ \text{P\&L}_{\text{day}} \approx \underbrace{\tfrac{1}{2}\Gamma(\Delta S)^2}_{\text{realized move}} \;-\; \underbrace{|\Theta|}_{\text{theta rent}} $$
 
 令两者相等，解出**盈亏平衡的日波动**：
 
-$$ |\Delta S|_{\text{平衡}} \approx S\,\sigma\sqrt{\tfrac{1}{365}} = \text{隐含的日波动} $$
+$$ |\Delta S|_{\text{BE}} \approx S\,\sigma\sqrt{\tfrac{1}{365}}\quad(=\text{implied daily move}) $$
 
 - **实际日波动 > 隐含日波动 → 多头 Gamma 净赚**（Gamma scalping 收益盖过 Theta）。
 - **实际 < 隐含 → 卖方（空头 Gamma/正 Theta）净赚**。

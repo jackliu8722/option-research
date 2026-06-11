@@ -21,7 +21,7 @@ updated: 2026-06-10
 
 **Vega（𝒱）= 隐含波动率变动 1 个百分点时，期权价格的变动量。**
 
-$$ \mathcal{V} = \frac{\partial V}{\partial \sigma}\quad(\text{通常按"每 1\%（1 vol 点）"报价}) $$
+$$ \mathcal{V} = \frac{\partial V}{\partial \sigma}\quad(\text{per 1\% vol}) $$
 
 - **买入期权（long call / long put）→ Vega 为正**：IV 升值钱、IV 跌亏钱（Call/Put 同号）。
 - **卖出期权 → Vega 为负**。
@@ -76,7 +76,7 @@ $$ \mathcal{V} = \frac{\partial V}{\partial \sigma}\quad(\text{通常按"每 1\%
 
 持仓净 𝒱 = +\$300 / 1%（多头 Vega）。一次事件后 DVOL 从 85% 跌到 65%（−20 点）：
 
-$$ \text{Vega 盈亏} \approx +300 \times (-20) = -\$6{,}000 $$
+$$ \text{Vega P\&L} \approx 300 \times (-20) = -\$6{,}000 $$
 
 - 即便标的没怎么动、方向也没错，**单是 IV 回落就亏 \$6,000**。这就是 vol crush 对多头 Vega 的杀伤。
 - 币口径换算：`𝒱_btc = 𝒱_usd / S`（见 [07 单位篇](./07-币本位希腊字母的单位与换算.md)）。
