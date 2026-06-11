@@ -4,10 +4,10 @@
 
 ## 已完成
 - [01 · 单腿策略](./01-单腿策略.md) — 四种单腿盈亏/平衡/希腊字母轮廓/何时用对比（卡片见 `strategies/`）
-  - 卡片：[买入看涨 Long Call](../../strategies/买入看涨-long-call.md)
+  - 卡片：[买入看涨 Long Call](../../strategies/买入看涨-long-call.md) · [买入看跌 Long Put](../../strategies/买入看跌-long-put.md) · [卖出看涨 Short Call](../../strategies/卖出看涨-short-call.md) · [卖出看跌 Short Put](../../strategies/卖出看跌-short-put.md)
 
 ## 计划策略
-- 买入看涨 / 买入看跌（教学✅；卡片：买入看涨✅，买入看跌 待写）
+- 单腿（买/卖 看涨/看跌）：教学✅ + 4 张卡片✅
 - 卖出看涨 / 卖出看跌（含裸卖风险）
 - 备兑开仓（Covered Call）
 - 保护性看跌（Protective Put）
