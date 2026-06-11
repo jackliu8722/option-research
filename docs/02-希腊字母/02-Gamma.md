@@ -63,7 +63,7 @@ Delta 中性不能一劳永逸，正是因为 Gamma：
 
 持有一张多头期权，Γ = 0.00002/\$（示意）。BTC 一天内来回波动，净位移 `ΔS = ±3,000`：
 
-$$ \text{Gamma PnL} \approx \tfrac{1}{2} \times 0.00002 \times 3{,}000^2 = \tfrac{1}{2}\times 0.00002 \times 9{,}000{,}000 \approx \$90 $$
+$$ \text{Gamma PnL} \approx \tfrac{1}{2} \times 0.00002 \times 3{,}000^2 = \tfrac{1}{2}\times 0.00002 \times 9{,}000{,}000 \approx 90 $$
 
 - 不管这 \$3,000 是涨还是跌，凸性都贡献约 +\$90（多头 Gamma）。
 - 若当天 Theta 损耗 > \$90 → 净亏；< \$90 → 净赚。**这就是"已实现波动 vs 隐含波动"的对决。**

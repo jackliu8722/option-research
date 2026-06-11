@@ -76,7 +76,7 @@ $$ \mathcal{V} = \frac{\partial V}{\partial \sigma}\quad(\text{per 1\% vol}) $$
 
 持仓净 𝒱 = +\$300 / 1%（多头 Vega）。一次事件后 DVOL 从 85% 跌到 65%（−20 点）：
 
-$$ \text{Vega PnL} \approx 300 \times (-20) = -\$6{,}000 $$
+$$ \text{Vega PnL} \approx 300 \times (-20) = -6{,}000 $$
 
 - 即便标的没怎么动、方向也没错，**单是 IV 回落就亏 \$6,000**。这就是 vol crush 对多头 Vega 的杀伤。
 - 币口径换算：`𝒱_btc = 𝒱_usd / S`（见 [07 单位篇](./07-币本位希腊字母的单位与换算.md)）。
