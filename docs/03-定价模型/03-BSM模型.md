@@ -62,8 +62,8 @@ $$ C = e^{-r\tau}\Big(\underbrace{\mathbb{E}^{Q}[S_T\,\mathbf{1}_{S_T>K}]}_{\tex
 
 （第一块=拿到标的的那部分，第二块=付出行权价的那部分。）
 
-- **第二块**：$\mathbb{E}^Q[\mathbf{1}_{S_T>K}] = Q(S_T>K) = N(d_2)$。把对数正态的 `P(S_T>K)` 标准化即得 `d₂`。
-- **第一块**：含 `S_T` 的加权，需做一次测度/变量变换，结果 $\mathbb{E}^Q[S_T \mathbf{1}_{S_T>K}] = S_0 e^{(r-q)\tau} N(d_1)$，多出的 `σ²` 把 `d₂` 抬成 $d_1 = d_2 + \sigma\sqrt{\tau}$。
+- **第二块**： $\mathbb{E}^Q[\mathbf{1}_{S_T>K}] = Q(S_T>K) = N(d_2)$ 。把对数正态的 `P(S_T>K)` 标准化即得 `d₂`。
+- **第一块**：含 `S_T` 的加权，需做一次测度/变量变换，结果 $\mathbb{E}^Q[S_T \mathbf{1}_{S_T>K}] = S_0 e^{(r-q)\tau} N(d_1)$ ，多出的 `σ²` 把 `d₂` 抬成 $d_1 = d_2 + \sigma\sqrt{\tau}$ 。
 
 代回并整理即得 §2 的 Call 公式。Put 由[平价公式](./01-平价公式.md) $C - P = Se^{-q\tau} - Ke^{-r\tau}$ 立刻得到。
 
@@ -79,11 +79,11 @@ $$ C = e^{-r\tau}\Big(\underbrace{\mathbb{E}^{Q}[S_T\,\mathbf{1}_{S_T>K}]}_{\tex
 |---|---|
 | `N(d_2)` | **风险中性下到期实值的概率** `Q(S_T>K)` |
 | $K e^{-r\tau} N(d_2)$ | 行权要付的 `K` 的现值 ×（要付的概率） |
-| `N(d_1)` | 与 **Delta** 直接相关：$\Delta_{call} = e^{-q\tau}N(d_1)$ |
+| `N(d_1)` | 与 **Delta** 直接相关： $\Delta_{call} = e^{-q\tau}N(d_1)$ |
 | $S e^{-q\tau} N(d_1)$ | 行权才拿到的标的的现值（按拿到的"风险调整"权重） |
 | $\sigma\sqrt{\tau}$ | 总波动量；`d_1−d_2` 就等于它 |
 
-> 回扣 [Delta 篇](../02-希腊字母/01-Delta.md) 的"Δ≈到期实值概率"：更精确说，**Call 的 Delta = N(d₁)**，而**到期实值概率 = N(d₂)**，两者相差 $\sigma\sqrt{\tau}$，深虚/长到期时差距明显。
+> 回扣 [Delta 篇](../02-希腊字母/01-Delta.md) 的"Δ≈到期实值概率"：更精确说，**Call 的 Delta = N(d₁)**，而**到期实值概率 = N(d₂)**，两者相差 $\sigma\sqrt{\tau}$ ，深虚/长到期时差距明显。
 
 ---
 
@@ -94,13 +94,13 @@ BSM 给出希腊字母的闭式解（设 `n(·)` 为标准正态密度，下为�
 | 希腊字母 | Call 表达式 |
 |---|---|
 | Delta | $e^{-q\tau} N(d_1)$ |
-| Gamma | $\dfrac{e^{-q\tau} n(d_1)}{S\,\sigma\sqrt{\tau}}$（Call/Put 相同） |
-| Vega | $S e^{-q\tau} n(d_1)\sqrt{\tau}$（Call/Put 相同，恒正） |
+| Gamma | $\dfrac{e^{-q\tau} n(d_1)}{S\,\sigma\sqrt{\tau}}$ （Call/Put 相同） |
+| Vega | $S e^{-q\tau} n(d_1)\sqrt{\tau}$ （Call/Put 相同，恒正） |
 | Theta | 含 $-\dfrac{S e^{-q\tau} n(d_1)\sigma}{2\sqrt{\tau}}$ 等项 |
 | Rho | $K \tau e^{-r\tau} N(d_2)$ |
 
 - **Gamma、Vega 在 Call/Put 相同且恒正** → 印证 [02 章](../02-希腊字母/06-组合希腊字母与关系.md) 的结论。
-- Gamma 分母含 $\sigma\sqrt{\tau}$、Vega 含 $\sqrt{\tau}$ → 解释"短到期 Gamma 大、长到期 Vega 大"。
+- Gamma 分母含 $\sigma\sqrt{\tau}$ 、Vega 含 $\sqrt{\tau}$ → 解释"短到期 Gamma 大、长到期 Vega 大"。
 
 ---
 
@@ -133,7 +133,7 @@ $$ d_1=\frac{0 + (0.1 + 0.32)\times0.25}{0.8\times0.5}=\frac{0.105}{0.4}=0.2625,
 $$ C = 60{,}000\times0.6035 - 60{,}000\,e^{-0.025}\times0.4453 = 36{,}210 - 26{,}058 \approx \boxed{10{,}150} $$
 
 - 对照 [二叉树单步](./02-二叉树模型.md) 的 \$12,439：**单步太粗，BSM（=无穷步极限）给出约 \$10,150**，多步二叉树会收敛到这个值。
-- 验证平价：$C-P = S-Ke^{-r\tau}=1{,}481$（与 [01-平价](./01-平价公式.md) 算例一致）→ $P\approx 8{,}669$。`推导`
+- 验证平价： $C-P = S-Ke^{-r\tau}=1{,}481$ （与 [01-平价](./01-平价公式.md) 算例一致）→ $P\approx 8{,}669$ 。`推导`
 
 ---
 
@@ -141,7 +141,7 @@ $$ C = 60{,}000\times0.6035 - 60{,}000\,e^{-0.025}\times0.4453 = 36{,}210 - 26{,
 
 - ❌ 把 BSM 当"真实价格" → 它是一组强假设下的模型，加密里更像报价/IV 翻译器。
 - ❌ 用单一 σ 给所有行权价定价 → 现实有微笑，需曲面。
-- ❌ 混淆 `N(d₁)` 与 `N(d₂)` → 前者是 Delta、后者是实值概率，差 $\sigma\sqrt{\tau}$。
+- ❌ 混淆 `N(d₁)` 与 `N(d₂)` → 前者是 Delta、后者是实值概率，差 $\sigma\sqrt{\tau}$ 。
 - ❌ 在加密直接套美债 r、忽略币本位非线性 → 见 09/01、09/03。
 
 ---

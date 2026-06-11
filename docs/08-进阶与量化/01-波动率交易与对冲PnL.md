@@ -9,7 +9,7 @@ updated: 2026-06-11
 
 # 波动率交易与 Delta 对冲下的 PnL（含推导）
 
-> 把期权 Delta 对冲后，剩下的盈亏几乎只取决于一件事：**已实现波动 vs 隐含波动谁高**。本篇**推导**这条核心结论——Delta 对冲组合每天的盈亏 $\approx \tfrac{1}{2}\,\Gamma S^2(\sigma_{\text{real}}^2-\sigma_{\text{imp}}^2)\,dt$——它把 [Theta](../02-希腊字母/03-Theta.md)、[Gamma](../02-希腊字母/02-Gamma.md)、[波动率](../04-波动率/) 串成一条主线。
+> 把期权 Delta 对冲后，剩下的盈亏几乎只取决于一件事：**已实现波动 vs 隐含波动谁高**。本篇**推导**这条核心结论——Delta 对冲组合每天的盈亏 $\approx \tfrac{1}{2}\,\Gamma S^2(\sigma_{\text{real}}^2-\sigma_{\text{imp}}^2)\,dt$ ——它把 [Theta](../02-希腊字母/03-Theta.md)、[Gamma](../02-希腊字母/02-Gamma.md)、[波动率](../04-波动率/) 串成一条主线。
 
 ## 前置知识
 - [03-Theta](../02-希腊字母/03-Theta.md)、[03-BSM 模型](../03-定价模型/03-BSM模型.md)
@@ -18,7 +18,7 @@ updated: 2026-06-11
 
 ## 1. 设定：持有期权 + 连续 Delta 对冲
 
-持有一张期权 $V$，用 $-\Delta$ 单位标的对冲方向。组合 $\Pi = V - \Delta S$。考察一个小时段 $dt$ 内的盈亏（暂略利率/carry，聚焦核心）。
+持有一张期权 $V$ ，用 $-\Delta$ 单位标的对冲方向。组合 $\Pi = V - \Delta S$ 。考察一个小时段 $dt$ 内的盈亏（暂略利率/carry，聚焦核心）。
 
 ---
 
@@ -40,7 +40,7 @@ $$ \Theta \approx -\tfrac{1}{2}\,\sigma_{\text{imp}}^2\,S^2\,\Gamma $$
 
 $$ d\Pi \approx \tfrac{1}{2}\Gamma\,(dS)^2 - \tfrac{1}{2}\sigma_{\text{imp}}^2 S^2\Gamma\,dt = \tfrac{1}{2}\Gamma S^2\!\left[\left(\frac{dS}{S}\right)^2 - \sigma_{\text{imp}}^2\,dt\right] $$
 
-由于 $\mathbb{E}\!\left[(dS/S)^2\right]=\sigma_{\text{real}}^2\,dt$，取期望得**核心公式**：
+由于 $\mathbb{E}\!\left[(dS/S)^2\right]=\sigma_{\text{real}}^2\,dt$ ，取期望得**核心公式**：
 
 $$ \boxed{\;\mathbb{E}[d\Pi] \approx \tfrac{1}{2}\,\Gamma S^2\left(\sigma_{\text{real}}^2 - \sigma_{\text{imp}}^2\right)dt\;} $$
 
@@ -48,9 +48,9 @@ $$ \boxed{\;\mathbb{E}[d\Pi] \approx \tfrac{1}{2}\,\Gamma S^2\left(\sigma_{\text
 
 ## 3. 结论的含义
 
-- **多头期权（$\Gamma>0$）**：当 $\sigma_{\text{real}}>\sigma_{\text{imp}}$ → Delta 对冲后**净赚**；反之被 Theta 吃。
-- **空头期权（$\Gamma<0$）**：当 $\sigma_{\text{real}}<\sigma_{\text{imp}}$ → 净赚（卖贵的 IV，实际没那么波动）。
-- 权重是**美元 Gamma** $\Gamma S^2$：ATM、临到期最大（[Gamma 篇](../02-希腊字母/02-Gamma.md)）。
+- **多头期权（ $\Gamma>0$ ）**：当 $\sigma_{\text{real}}>\sigma_{\text{imp}}$ → Delta 对冲后**净赚**；反之被 Theta 吃。
+- **空头期权（ $\Gamma<0$ ）**：当 $\sigma_{\text{real}}<\sigma_{\text{imp}}$ → 净赚（卖贵的 IV，实际没那么波动）。
+- 权重是**美元 Gamma** $\Gamma S^2$ ：ATM、临到期最大（[Gamma 篇](../02-希腊字母/02-Gamma.md)）。
 - 这就是 [Theta 篇"波动率对决"](../02-希腊字母/03-Theta.md) 的精确版，也是 [跨式](../06-组合策略/01-跨式与宽跨式.md) 等波动率策略的盈亏来源。
 
 ---
@@ -66,7 +66,7 @@ $$ \boxed{\;\mathbb{E}[d\Pi] \approx \tfrac{1}{2}\,\Gamma S^2\left(\sigma_{\text
 ## 5. 加密视角
 
 - 用**永续**做 Delta 对冲（[09/02](../09-加密期权专题/02-永续合约与资金费率对冲.md)），**资金费率/滑点**计入对冲成本，吃掉部分 Gamma 收益。
-- $\sigma_{\text{imp}}$ 用 [DVOL/IV](../09-加密期权专题/04-DVOL与加密波动率特征.md)，$\sigma_{\text{real}}$ 用 [已实现波动](../04-波动率/01-历史波动率与已实现波动率.md)，注意同口径（年化 $\sqrt{365}$）。
+- $\sigma_{\text{imp}}$ 用 [DVOL/IV](../09-加密期权专题/04-DVOL与加密波动率特征.md)， $\sigma_{\text{real}}$ 用 [已实现波动](../04-波动率/01-历史波动率与已实现波动率.md)，注意同口径（年化 $\sqrt{365}$ ）。
 - 加密的**跳跃**让"已实现方差"出现尖峰 → 多头 Gamma 偶尔大赚、空头大亏（厚尾）。
 
 ---
@@ -86,5 +86,5 @@ $$ \boxed{\;\mathbb{E}[d\Pi] \approx \tfrac{1}{2}\,\Gamma S^2\left(\sigma_{\text
 - [09/02 永续对冲](../09-加密期权专题/02-永续合约与资金费率对冲.md)
 
 ## 8. 参考来源
-- Delta 对冲组合 PnL $=\tfrac{1}{2}\Gamma S^2(\sigma_{\text{real}}^2-\sigma_{\text{imp}}^2)dt$、路径依赖、对冲误差属 `公认结论`（Hull 第 19 章 / Natenberg / Carr）。
+- Delta 对冲组合 PnL $=\tfrac{1}{2}\Gamma S^2(\sigma_{\text{real}}^2-\sigma_{\text{imp}}^2)dt$ 、路径依赖、对冲误差属 `公认结论`（Hull 第 19 章 / Natenberg / Carr）。
 - 推导为标准 `推导`（略 carry 项）。

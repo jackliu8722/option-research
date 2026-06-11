@@ -61,7 +61,7 @@ $$ \Delta = \frac{\partial V}{\partial S} \approx \frac{\Delta V}{\Delta S} $$
 
 $$ \Delta_{\text{port}} = \sum_i n_i\,\Delta_i $$
 
-其中 $n_i$ 为各腿数量（$\Delta_{\text{port}}$ = 组合净 Delta）。
+其中 $n_i$ 为各腿数量（ $\Delta_{\text{port}}$ = 组合净 Delta）。
 
 - 净 Δ > 0 → 整体偏多；< 0 → 偏空；= 0 → **Delta 中性**（瞬时对标的方向不敏感）。
 - Delta 中性**不是一劳永逸**：标的一动，各腿 Δ 变化（Gamma 作用）→ 净 Δ 漂移 → 要再对冲。
