@@ -158,6 +158,28 @@ class Position:
                 out[(dp, dv)] = mtm - self.entry_premium
         return out
 
+    def expected_pnl(self, mu, sigma_real, lo=0.2, hi=3.0, n=3000):
+        """在'你的观点'下评估：终端价服从对数正态(漂移 mu、实际波动 sigma_real)。
+        返回 EV(期望盈亏)、POP(盈利概率)、mass(密度校验，应≈1)。
+        ⚠️ EV 完全取决于你输入的观点分布——这是评估工具，不是预测。
+        风险中性(mu=r、sigma=隐含)下任何仓位 EV≈0，必须用你与市场不同的看法才有意义。"""
+        S0, tau = self.S0, self.tau
+        a = (mu - 0.5 * sigma_real ** 2) * tau
+        b = sigma_real * math.sqrt(tau)
+        los, his = S0 * lo, S0 * hi
+        dx = (his - los) / n
+        ev = pop = mass = 0.0
+        for i in range(n):
+            ST = los + (i + 0.5) * dx
+            z = (math.log(ST / S0) - a) / b
+            w = math.exp(-0.5 * z * z) / (ST * b * SQRT2PI) * dx
+            pnl = self.expiry_pnl(ST)
+            ev += pnl * w
+            mass += w
+            if pnl > 0:
+                pop += w
+        return {"EV": ev, "POP": pop, "mass": mass}
+
     # ---- 币本位 / 反向(inverse) 口径（Deribit）----
     def entry_premium_coin(self):
         "入场净权利金（BTC）：USD 净权利金 / 入场现价（Deribit 权利金以币计）"
