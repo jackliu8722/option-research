@@ -45,12 +45,14 @@ def iron_condor(Kp_s, Kp_l, Kc_s, Kc_l):
 
 def metrics(pos):
     s = pos.summary()
-    e = pos.expected_pnl(VIEW_MU, VIEW_SIGMA)
-    credit = -pos.entry_premium                      # >0=净贷方收
+    e = pos.expected_pnl(VIEW_MU, VIEW_SIGMA)          # USD 口径
+    ec = pos.expected_pnl_coin(VIEW_MU, VIEW_SIGMA)    # 币本位口径(BTC)
+    credit = -pos.entry_premium                        # >0=净贷方收
     maxp, maxl = s["max_profit"][1], s["max_loss"][1]
     rr = (maxp / abs(maxl)) if maxl < 0 else float("inf")
-    return {"credit": credit, "maxp": maxp, "maxl": maxl,
-            "rr": rr, "pop": e["POP"], "ev": e["EV"]}
+    return {"credit": credit, "maxp": maxp, "maxl": maxl, "rr": rr,
+            "pop": e["POP"], "ev": e["EV"],
+            "ev_coin": ec["EV"], "ev_coin_usd": ec["EV"] * pos.S0}
 
 
 def scan_bull_puts():
@@ -60,13 +62,13 @@ def scan_bull_puts():
             Kl = Ks - w
             m = metrics(bull_put(Ks, Kl))
             rows.append((f"{Ks:,.0f}/{Kl:,.0f}", w, m))
-    rows.sort(key=lambda r: r[2]["ev"], reverse=True)
-    print("\n【牛市看跌价差扫描】（按 EV 排序）")
+    rows.sort(key=lambda r: r[2]["ev_coin"], reverse=True)   # 按币本位 EV 排序
+    print("\n【牛市看跌价差扫描】（按币本位 EV 排序）")
     print(f"  观点: μ={VIEW_MU:.0%}/年, σ_real={VIEW_SIGMA:.0%}（ATM隐含≈{ATM:.0%}）")
-    print(f"  {'卖/买':>14} {'宽':>6} {'净贷$':>8} {'最大亏$':>9} {'R:R':>6} {'POP':>6} {'EV$':>8}")
+    print(f"  {'卖/买':>14} {'宽':>6} {'净贷$':>8} {'最大亏$':>9} {'R:R':>6} {'POP':>6} {'USD-EV$':>8} {'币EV$≈':>8}")
     for name, w, m in rows:
         print(f"  {name:>14} {w:>6,} {m['credit']:>8,.0f} {m['maxl']:>9,.0f} "
-              f"{m['rr']:>6.2f} {m['pop']:>6.1%} {m['ev']:>+8,.0f}")
+              f"{m['rr']:>6.2f} {m['pop']:>6.1%} {m['ev']:>+8,.0f} {m['ev_coin_usd']:>+8,.0f}")
 
 
 def scan_iron_condors():
@@ -77,12 +79,12 @@ def scan_iron_condors():
             ic = iron_condor(Kp_s, Kp_s - w, Kc_s, Kc_s + w)
             m = metrics(ic)
             rows.append((f"{Kp_s:,.0f}-{Kc_s:,.0f}", w, m))
-    rows.sort(key=lambda r: r[2]["ev"], reverse=True)
-    print("\n【铁鹰扫描】（按 EV 排序）")
-    print(f"  {'区间':>16} {'宽':>6} {'净贷$':>8} {'最大亏$':>9} {'R:R':>6} {'POP':>6} {'EV$':>8}")
+    rows.sort(key=lambda r: r[2]["ev_coin"], reverse=True)
+    print("\n【铁鹰扫描】（按币本位 EV 排序）")
+    print(f"  {'区间':>16} {'宽':>6} {'净贷$':>8} {'最大亏$':>9} {'R:R':>6} {'POP':>6} {'USD-EV$':>8} {'币EV$≈':>8}")
     for name, w, m in rows:
         print(f"  {name:>16} {w:>6,} {m['credit']:>8,.0f} {m['maxl']:>9,.0f} "
-              f"{m['rr']:>6.2f} {m['pop']:>6.1%} {m['ev']:>+8,.0f}")
+              f"{m['rr']:>6.2f} {m['pop']:>6.1%} {m['ev']:>+8,.0f} {m['ev_coin_usd']:>+8,.0f}")
 
 
 if __name__ == "__main__":

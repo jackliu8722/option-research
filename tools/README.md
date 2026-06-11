@@ -61,7 +61,8 @@ print(ascii_payoff(pos, lo=0.7, hi=1.3, coin=False))   # 纯文本到期盈亏�
 ```bash
 python3 tools/scan_strategies.py
 ```
-- 遍历牛市看跌价差与铁鹰的参数，按**期望盈亏 EV** 排序，同时给 POP（胜率）、R:R、净贷方、最大亏损。
+- 遍历牛市看跌价差与铁鹰的参数，**按币本位 EV 排序**，同时给 USD-EV、币EV、POP（胜率）、R:R、净贷方、最大亏损。
+- **USD-EV vs 币 EV**：反向结算放大下行亏损 → 币 EV 系统性低于 USD-EV，多个"USD 看着划算"的下方价差在币口径翻负。对币保证金交易者，**币 EV 才是该看的**（[09/01](../docs/09-加密期权专题/01-币本位与反向合约.md)）。
 - **EV 在"你的观点分布"下计算**：改文件顶部 `VIEW_MU`（漂移）、`VIEW_SIGMA`（你认为的实际波动）即可看排序如何变。
 - 偏斜 IV 由 `skew_iv(K)` 给（可调 `ATM/PUT_SLOPE/CALL_SLOPE`）。
 

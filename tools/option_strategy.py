@@ -189,6 +189,27 @@ class Position:
         "反向到期盈亏（BTC）= USD 内在价值 / ST − 入场币权利金（见 docs/09/01）"
         return self.expiry_payoff(ST) / ST - self.entry_premium_coin()
 
+    def expected_pnl_coin(self, mu, sigma_real, lo=0.05, hi=3.0, n=4000):
+        """币本位(BTC)口径 EV/POP，在 (mu, sigma_real) 终端对数正态下。
+        用反向盈亏 expiry_pnl_coin 积分，并把下界探到 0.05*S0 以捕捉
+        'USD 封顶亏损在币口径放大'的左尾（见 docs/09/01）。"""
+        S0, tau = self.S0, self.tau
+        a = (mu - 0.5 * sigma_real ** 2) * tau
+        b = sigma_real * math.sqrt(tau)
+        los, his = S0 * lo, S0 * hi
+        dx = (his - los) / n
+        ev = pop = mass = 0.0
+        for i in range(n):
+            ST = los + (i + 0.5) * dx
+            z = (math.log(ST / S0) - a) / b
+            w = math.exp(-0.5 * z * z) / (ST * b * SQRT2PI) * dx
+            pnl = self.expiry_pnl_coin(ST)
+            ev += pnl * w
+            mass += w
+            if pnl > 0:
+                pop += w
+        return {"EV": ev, "POP": pop, "mass": mass}
+
     def summary_coin(self, lo=0.5, hi=1.8, step=0.001):
         "币口径最大盈亏与盈亏平衡（BTC）"
         S0 = self.S0
