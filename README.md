@@ -35,6 +35,7 @@
 - [strategies/](./strategies/) — 策略卡片库（每个策略一份结构化文档）
 - [research/](./research/) — 研究笔记：`market-notes/` 市场观察、`journal/` 实盘复盘
 - [references/](./references/) — [术语表](./references/术语表.md)、[书单与资源](./references/书单与资源.md)
+- [tools/](./tools/) — 量化分析工具（`option_strategy.py`：BSM/希腊字母/组合盈亏/压力测试，纯标准库）
 - [templates/](./templates/) — 写作模板
 
 ## 免责声明
