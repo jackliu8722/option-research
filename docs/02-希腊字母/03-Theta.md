@@ -54,7 +54,7 @@ $$ \Theta \approx -\tfrac{1}{2}\,\sigma^2 S^2\,\Gamma $$
 
 把 [Gamma 凸性收益 ½Γ(ΔS)²](./02-Gamma.md) 和每天的 Theta 租金放一起，多头 Gamma 仓位每天的盈亏大致是：
 
-$$ \text{P\&L}_{\text{day}} \approx \underbrace{\tfrac{1}{2}\Gamma(\Delta S)^2}_{\text{realized move}} \;-\; \underbrace{|\Theta|}_{\text{theta rent}} $$
+$$ \text{PnL}_{\text{day}} \approx \underbrace{\tfrac{1}{2}\Gamma(\Delta S)^2}_{\text{realized move}} \;-\; \underbrace{|\Theta|}_{\text{theta rent}} $$
 
 令两者相等，解出**盈亏平衡的日波动**：
 

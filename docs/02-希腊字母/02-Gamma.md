@@ -40,7 +40,7 @@ $$ \Gamma = \frac{\partial \Delta}{\partial S} = \frac{\partial^2 V}{\partial S^
 
 Delta 只是局部线性近似，**Gamma 衡量这条近似偏离实际的弯曲**。对一段标的变动 `ΔS`，Gamma 带来的额外损益：
 
-$$ \text{Gamma P\&L} \approx \tfrac{1}{2}\,\Gamma\,(\Delta S)^2 $$
+$$ \text{Gamma PnL} \approx \tfrac{1}{2}\,\Gamma\,(\Delta S)^2 $$
 
 - 这一项**与方向无关**（`(ΔS)²` 恒正）：**多头 Gamma 不管涨跌都赚这块弯曲**；空头 Gamma 不管涨跌都亏。
 - 代价：多头 Gamma 必然**付 Theta**（时间衰减），空头 Gamma 必然**收 Theta**。**Gamma 与 Theta 是一对反向兄弟**（见 [03-Theta](./03-Theta.md)）。
@@ -63,7 +63,7 @@ Delta 中性不能一劳永逸，正是因为 Gamma：
 
 持有一张多头期权，Γ = 0.00002/\$（示意）。BTC 一天内来回波动，净位移 `ΔS = ±3,000`：
 
-$$ \text{Gamma P\&L} \approx \tfrac{1}{2} \times 0.00002 \times 3{,}000^2 = \tfrac{1}{2}\times 0.00002 \times 9{,}000{,}000 \approx \$90 $$
+$$ \text{Gamma PnL} \approx \tfrac{1}{2} \times 0.00002 \times 3{,}000^2 = \tfrac{1}{2}\times 0.00002 \times 9{,}000{,}000 \approx \$90 $$
 
 - 不管这 \$3,000 是涨还是跌，凸性都贡献约 +\$90（多头 Gamma）。
 - 若当天 Theta 损耗 > \$90 → 净亏；< \$90 → 净赚。**这就是"已实现波动 vs 隐含波动"的对决。**
