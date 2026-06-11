@@ -72,6 +72,25 @@ def bsm_greeks(S, K, tau, sigma, r=0.0, q=0.0, kind="call"):
             "vega": vega / 100.0, "theta": theta / 365.0, "rho": rho / 100.0}
 
 
+def implied_vol(price, S, K, tau, r=0.0, q=0.0, kind="call",
+                tol=1e-7, maxit=200, lo=1e-4, hi=5.0):
+    "由市场价反解 IV（二分法，稳健；深虚值 vega→0 时优于牛顿）。无解返回 None。"
+    # 边界检查：价格须落在 [内在价值折现, 上界] 内
+    p_lo, p_hi = bsm_price(S, K, tau, lo, r, q, kind), bsm_price(S, K, tau, hi, r, q, kind)
+    if not (min(p_lo, p_hi) - 1e-9 <= price <= max(p_lo, p_hi) + 1e-9):
+        return None
+    for _ in range(maxit):
+        mid = 0.5 * (lo + hi)
+        p = bsm_price(S, K, tau, mid, r, q, kind)
+        if abs(p - price) < tol:
+            return mid
+        if (p < price) == (p_hi > p_lo):
+            lo = mid
+        else:
+            hi = mid
+    return 0.5 * (lo + hi)
+
+
 @dataclass
 class Leg:
     qty: int          # +多 / -空
@@ -139,9 +158,65 @@ class Position:
                 out[(dp, dv)] = mtm - self.entry_premium
         return out
 
+    # ---- 币本位 / 反向(inverse) 口径（Deribit）----
+    def entry_premium_coin(self):
+        "入场净权利金（BTC）：USD 净权利金 / 入场现价（Deribit 权利金以币计）"
+        return self.entry_premium / self.S0
+
+    def expiry_pnl_coin(self, ST):
+        "反向到期盈亏（BTC）= USD 内在价值 / ST − 入场币权利金（见 docs/09/01）"
+        return self.expiry_payoff(ST) / ST - self.entry_premium_coin()
+
+    def summary_coin(self, lo=0.5, hi=1.8, step=0.001):
+        "币口径最大盈亏与盈亏平衡（BTC）"
+        S0 = self.S0
+        grid = [S0 * (lo + i * step) for i in range(int((hi - lo) / step) + 1)]
+        pnls = [(s, self.expiry_pnl_coin(s)) for s in grid]
+        max_p = max(pnls, key=lambda t: t[1])
+        min_p = min(pnls, key=lambda t: t[1])
+        bes = []
+        for (s0, p0), (s1, p1) in zip(pnls, pnls[1:]):
+            if (p0 <= 0 < p1) or (p0 >= 0 > p1):
+                bes.append(s0 + (s1 - s0) * (-p0) / (p1 - p0))
+        return {"net_premium_coin": self.entry_premium_coin(),
+                "max_profit": max_p, "max_loss": min_p, "breakevens": bes}
+
 
 def _fmt_usd(x):
     return f"{'+' if x >= 0 else '-'}${abs(x):,.0f}"
+
+
+def ascii_payoff(pos, lo=0.7, hi=1.3, cols=56, rows=13, coin=False):
+    "纯文本到期盈亏图（无需 matplotlib）。'*'=盈亏曲线，'·'=零线，'^'=当前 S0。"
+    S0 = pos.S0
+    xs = [S0 * (lo + (hi - lo) * i / (cols - 1)) for i in range(cols)]
+    fn = pos.expiry_pnl_coin if coin else pos.expiry_pnl
+    ys = [fn(x) for x in xs]
+    ymin, ymax = min(ys), max(ys)
+    span = (ymax - ymin) or 1.0
+    r_of = lambda y: int(round((ymax - y) / span * (rows - 1)))
+    grid = [[" "] * cols for _ in range(rows)]
+    zr = r_of(0.0) if ymin <= 0 <= ymax else None
+    if zr is not None:
+        for c in range(cols):
+            grid[zr][c] = "·"
+    for c, y in enumerate(ys):
+        grid[r_of(y)][c] = "*"
+    unit = "BTC" if coin else "USD"
+    out = [f"  盈亏图（{unit}，到期；'·'=零线，'^'=S0={S0:,.0f}）"]
+    for r in range(rows):
+        if coin:
+            lab = f"{ymax:>+10.4f}" if r == 0 else (f"{ymin:>+10.4f}" if r == rows - 1 else " " * 10)
+        else:
+            lab = f"{ymax:>+10,.0f}" if r == 0 else (f"{ymin:>+10,.0f}" if r == rows - 1 else " " * 10)
+        out.append(f"{lab} |" + "".join(grid[r]))
+    s0c = int(round((S0 - xs[0]) / (xs[-1] - xs[0]) * (cols - 1)))
+    axis = ["─"] * cols
+    if 0 <= s0c < cols:
+        axis[s0c] = "^"
+    out.append(" " * 11 + "+" + "".join(axis))
+    out.append(" " * 12 + f"{xs[0]:,.0f}" + " " * (cols - 12) + f"{xs[-1]:,.0f}")
+    return "\n".join(out)
 
 
 def demo():
@@ -170,8 +245,21 @@ def demo():
         print(f"  盈亏平衡: " + ", ".join(f"{b:,.0f}" for b in s["breakevens"]))
         print(f"  净希腊字母: Δ={g['delta']:+.3f}  Γ={g['gamma']:+.6f}"
               f"  Vega={_fmt_usd(g['vega'])}/1%  Θ={_fmt_usd(g['theta'])}/天")
+    # --- 扩展功能演示 ---
     print("\n" + "=" * 66)
-    print("注：USD 口径；Deribit 币本位需另做反向换算（docs/09/01）。不构成建议。")
+    px = bsm_price(S0, 60000, tau, 0.60, kind="call")
+    iv = implied_vol(px, S0, 60000, tau, kind="call")
+    print(f"[IV 反解自检] σ=0.60 → 定价 ${px:,.1f} → 反解 IV = {iv:.4f}（应≈0.60）")
+
+    a = Position(structures["A 牛市看跌价差"], S0, tau)
+    sc = a.summary_coin()
+    print(f"[币本位 A] 净权利金 = {sc['net_premium_coin']:+.4f} BTC  "
+          f"最大盈利 = {sc['max_profit'][1]:+.4f} BTC  "
+          f"最大亏损 = {sc['max_loss'][1]:+.4f} BTC")
+    print("\n" + ascii_payoff(a, coin=False))
+
+    print("\n" + "=" * 66)
+    print("注：USD 口径为主；Deribit 币本位用 *_coin 方法换算（docs/09/01）。不构成建议。")
 
 
 if __name__ == "__main__":
