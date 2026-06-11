@@ -13,7 +13,7 @@ scan_strategies.py — 给定"观点"批量扫描结构，按期望盈亏(EV)排
 """
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from option_strategy import Leg, Position  # noqa: E402
+from option_strategy import Leg, Position, lognormal_pdf, jump_mix_pdf  # noqa: E402
 
 # ===== 市场快照（2026-06-11，示意）=====
 S0 = 61672.0
@@ -32,6 +32,14 @@ def skew_iv(K):
 VIEW_MU = 0.00        # 年化漂移：0=认为不涨不跌（中性）
 VIEW_SIGMA = 0.50     # 你认为的"实际波动"：0.50 < ATM隐含0.58 → 你认为市场高估了波动
 
+# ===== 厚尾/崩盘跳跃参数（量化"跳跃尾部"对短波动率结构的惩罚）=====
+JUMP_LAMBDA = 0.10    # 到期窗口内发生一次崩盘的概率
+JUMP_MEAN = -0.25     # 崩盘态对数收益均值下移（≈ −22%）
+JUMP_SIGMA = 0.20     # 崩盘态额外波动
+
+CALM_PDF = lognormal_pdf(S0, VIEW_MU, VIEW_SIGMA, TAU)
+JUMP_PDF = jump_mix_pdf(S0, VIEW_MU, VIEW_SIGMA, TAU, JUMP_LAMBDA, JUMP_MEAN, JUMP_SIGMA)
+
 
 def bull_put(Ks, Kl):
     return Position([Leg(-1, "put", Ks, skew_iv(Ks)), Leg(+1, "put", Kl, skew_iv(Kl))], S0, TAU)
@@ -45,14 +53,15 @@ def iron_condor(Kp_s, Kp_l, Kc_s, Kc_l):
 
 def metrics(pos):
     s = pos.summary()
-    e = pos.expected_pnl(VIEW_MU, VIEW_SIGMA)          # USD 口径
-    ec = pos.expected_pnl_coin(VIEW_MU, VIEW_SIGMA)    # 币本位口径(BTC)
-    credit = -pos.entry_premium                        # >0=净贷方收
+    calm = pos.expected_pnl_dist(CALM_PDF, coin=True)   # 币本位·平静(对数正态)
+    jump = pos.expected_pnl_dist(JUMP_PDF, coin=True)   # 币本位·厚尾(崩盘跳跃)
+    credit = -pos.entry_premium
     maxp, maxl = s["max_profit"][1], s["max_loss"][1]
     rr = (maxp / abs(maxl)) if maxl < 0 else float("inf")
-    return {"credit": credit, "maxp": maxp, "maxl": maxl, "rr": rr,
-            "pop": e["POP"], "ev": e["EV"],
-            "ev_coin": ec["EV"], "ev_coin_usd": ec["EV"] * pos.S0}
+    return {"credit": credit, "maxl": maxl, "rr": rr,
+            "pop": calm["POP"],
+            "ev_calm": calm["EV"] * pos.S0,             # 折美元便于比较
+            "ev_jump": jump["EV"] * pos.S0}
 
 
 def scan_bull_puts():
@@ -62,13 +71,14 @@ def scan_bull_puts():
             Kl = Ks - w
             m = metrics(bull_put(Ks, Kl))
             rows.append((f"{Ks:,.0f}/{Kl:,.0f}", w, m))
-    rows.sort(key=lambda r: r[2]["ev_coin"], reverse=True)   # 按币本位 EV 排序
-    print("\n【牛市看跌价差扫描】（按币本位 EV 排序）")
-    print(f"  观点: μ={VIEW_MU:.0%}/年, σ_real={VIEW_SIGMA:.0%}（ATM隐含≈{ATM:.0%}）")
-    print(f"  {'卖/买':>14} {'宽':>6} {'净贷$':>8} {'最大亏$':>9} {'R:R':>6} {'POP':>6} {'USD-EV$':>8} {'币EV$≈':>8}")
+    rows.sort(key=lambda r: r[2]["ev_jump"], reverse=True)   # 按厚尾币 EV 排序
+    print("\n【牛市看跌价差扫描】（币本位 EV，按厚尾排序）")
+    print(f"  观点: μ={VIEW_MU:.0%}/年, σ_real={VIEW_SIGMA:.0%}（ATM隐含≈{ATM:.0%}）"
+          f"; 崩盘 λ={JUMP_LAMBDA:.0%}, 均值{JUMP_MEAN:.0%}")
+    print(f"  {'卖/买':>14} {'宽':>6} {'净贷$':>8} {'最大亏$':>9} {'R:R':>6} {'POP':>6} {'币EV平静$':>9} {'币EV厚尾$':>9}")
     for name, w, m in rows:
         print(f"  {name:>14} {w:>6,} {m['credit']:>8,.0f} {m['maxl']:>9,.0f} "
-              f"{m['rr']:>6.2f} {m['pop']:>6.1%} {m['ev']:>+8,.0f} {m['ev_coin_usd']:>+8,.0f}")
+              f"{m['rr']:>6.2f} {m['pop']:>6.1%} {m['ev_calm']:>+9,.0f} {m['ev_jump']:>+9,.0f}")
 
 
 def scan_iron_condors():
@@ -79,12 +89,12 @@ def scan_iron_condors():
             ic = iron_condor(Kp_s, Kp_s - w, Kc_s, Kc_s + w)
             m = metrics(ic)
             rows.append((f"{Kp_s:,.0f}-{Kc_s:,.0f}", w, m))
-    rows.sort(key=lambda r: r[2]["ev_coin"], reverse=True)
-    print("\n【铁鹰扫描】（按币本位 EV 排序）")
-    print(f"  {'区间':>16} {'宽':>6} {'净贷$':>8} {'最大亏$':>9} {'R:R':>6} {'POP':>6} {'USD-EV$':>8} {'币EV$≈':>8}")
+    rows.sort(key=lambda r: r[2]["ev_jump"], reverse=True)
+    print("\n【铁鹰扫描】（币本位 EV，按厚尾排序）")
+    print(f"  {'区间':>16} {'宽':>6} {'净贷$':>8} {'最大亏$':>9} {'R:R':>6} {'POP':>6} {'币EV平静$':>9} {'币EV厚尾$':>9}")
     for name, w, m in rows:
         print(f"  {name:>16} {w:>6,} {m['credit']:>8,.0f} {m['maxl']:>9,.0f} "
-              f"{m['rr']:>6.2f} {m['pop']:>6.1%} {m['ev']:>+8,.0f} {m['ev_coin_usd']:>+8,.0f}")
+              f"{m['rr']:>6.2f} {m['pop']:>6.1%} {m['ev_calm']:>+9,.0f} {m['ev_jump']:>+9,.0f}")
 
 
 if __name__ == "__main__":

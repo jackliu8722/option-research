@@ -63,6 +63,8 @@ python3 tools/scan_strategies.py
 ```
 - 遍历牛市看跌价差与铁鹰的参数，**按币本位 EV 排序**，同时给 USD-EV、币EV、POP（胜率）、R:R、净贷方、最大亏损。
 - **USD-EV vs 币 EV**：反向结算放大下行亏损 → 币 EV 系统性低于 USD-EV，多个"USD 看着划算"的下方价差在币口径翻负。对币保证金交易者，**币 EV 才是该看的**（[09/01](../docs/09-加密期权专题/01-币本位与反向合约.md)）。
+- **平静 vs 厚尾**：扫描默认对比对数正态(平静)与**崩盘跳跃混合**(`jump_mix_pdf`，顶部 `JUMP_*` 可调)的币 EV。结果：在 λ=10%、−22% 崩盘假设下，**所有短波动率结构币 EV 转负**——量化"捡钢镚"的尾部代价（[08/02 VRP](../docs/08-进阶与量化/02-已实现与隐含波动率价差.md)、[07/03 压测](../docs/07-风险管理/03-尾部风险与压力测试.md)）。
+- `Position.expected_pnl_dist(pdf, coin=)`：在任意终端密度下算 EV/POP（`lognormal_pdf` / `jump_mix_pdf`）。
 - **EV 在"你的观点分布"下计算**：改文件顶部 `VIEW_MU`（漂移）、`VIEW_SIGMA`（你认为的实际波动）即可看排序如何变。
 - 偏斜 IV 由 `skew_iv(K)` 给（可调 `ATM/PUT_SLOPE/CALL_SLOPE`）。
 

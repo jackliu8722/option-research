@@ -91,6 +91,32 @@ def implied_vol(price, S, K, tau, r=0.0, q=0.0, kind="call",
     return 0.5 * (lo + hi)
 
 
+def lognormal_pdf(S0, mu, sigma, tau):
+    "终端价对数正态密度：ln(ST) ~ N(ln S0 + (mu-σ²/2)τ, σ²τ)"
+    a = (mu - 0.5 * sigma * sigma) * tau
+    b = sigma * math.sqrt(tau)
+
+    def f(ST):
+        z = (math.log(ST / S0) - a) / b
+        return math.exp(-0.5 * z * z) / (ST * b * SQRT2PI)
+    return f
+
+
+def jump_mix_pdf(S0, mu, sigma, tau, lam, jump_mean, jump_sigma):
+    """两状态混合密度（捕捉厚左尾/崩盘）：
+       平静态 (1-lam)：对数正态(mu, sigma)
+       崩盘态 lam：对数收益再叠加均值 jump_mean(负, 如 -0.25) 与额外波动 jump_sigma
+    """
+    calm = lognormal_pdf(S0, mu, sigma, tau)
+    a2 = (mu - 0.5 * sigma * sigma) * tau + jump_mean
+    b2 = math.sqrt(sigma * sigma * tau + jump_sigma * jump_sigma)
+
+    def crash(ST):
+        z = (math.log(ST / S0) - a2) / b2
+        return math.exp(-0.5 * z * z) / (ST * b2 * SQRT2PI)
+    return lambda ST: (1 - lam) * calm(ST) + lam * crash(ST)
+
+
 @dataclass
 class Leg:
     qty: int          # +多 / -空
@@ -157,6 +183,23 @@ class Position:
                 mtm = self.price(self.S0 * (1 + dp), self.tau, dsigma=dv)
                 out[(dp, dv)] = mtm - self.entry_premium
         return out
+
+    def expected_pnl_dist(self, pdf, coin=False, lo=0.02, hi=4.0, n=5000):
+        "在任意终端密度 pdf(ST) 下的 EV/POP（coin=True 用币本位盈亏）。mass 应≈1。"
+        S0 = self.S0
+        los, his = S0 * lo, S0 * hi
+        dx = (his - los) / n
+        fn = self.expiry_pnl_coin if coin else self.expiry_pnl
+        ev = pop = mass = 0.0
+        for i in range(n):
+            ST = los + (i + 0.5) * dx
+            w = pdf(ST) * dx
+            pnl = fn(ST)
+            ev += pnl * w
+            mass += w
+            if pnl > 0:
+                pop += w
+        return {"EV": ev, "POP": pop, "mass": mass}
 
     def expected_pnl(self, mu, sigma_real, lo=0.2, hi=3.0, n=3000):
         """在'你的观点'下评估：终端价服从对数正态(漂移 mu、实际波动 sigma_real)。
