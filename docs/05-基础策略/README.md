@@ -9,9 +9,13 @@
 - [02 · 备兑与保护](./02-备兑与保护.md) — Covered Call / Protective Put 构成、合成等价、何时用对比
   - 卡片：[备兑开仓 Covered Call](../../strategies/备兑开仓-covered-call.md) · [保护性看跌 Protective Put](../../strategies/保护性看跌-protective-put.md)
 
-## 计划策略
+- [03 · 垂直价差](./03-垂直价差.md) — 四种垂直价差盈亏/借贷方等价/希腊字母被中和、限险方向与收租
+  - 卡片：[牛市看涨](../../strategies/牛市看涨价差-bull-call-spread.md) · [熊市看跌](../../strategies/熊市看跌价差-bear-put-spread.md) · [牛市看跌](../../strategies/牛市看跌价差-bull-put-spread.md) · [熊市看涨](../../strategies/熊市看涨价差-bear-call-spread.md)
+
+## 进度
 - 单腿（买/卖 看涨/看跌）：教学✅ + 4 张卡片✅
 - 备兑 / 保护：教学✅ + 2 张卡片✅
+- 垂直价差（牛/熊 × call/put）：教学✅ + 4 张卡片✅ —— **基础策略章完成**
 - 卖出看涨 / 卖出看跌（含裸卖风险）
 - 备兑开仓（Covered Call）
 - 保护性看跌（Protective Put）
