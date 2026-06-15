@@ -57,23 +57,25 @@ $$ d_1 = \frac{\ln(S/K) + (r - q + \tfrac{1}{2}\sigma^2)\tau}{\sigma\sqrt{\tau}}
 
 **逐步推导**（风险中性期望 + 对数正态）`推导`：
 
-1. **定价 = 风险中性期望折现**（承二叉树）：
+**① 定价 = 风险中性期望折现**（承二叉树）：
 
-   $$ C = e^{-r\tau}\,\mathbb{E}^{Q}\!\big[\max(S_T - K,\ 0)\big] $$
+$$ C = e^{-r\tau}\,\mathbb{E}^{Q}\!\big[\max(S_T - K,\ 0)\big] $$
 
-2. **风险中性下 $S_T$ 服从对数正态**（GBM 解 + 伊藤的 $-\tfrac{1}{2}\sigma^2$ 修正）：
+**② 风险中性下 $S_T$ 服从对数正态**（GBM 解 + 伊藤的 $-\tfrac{1}{2}\sigma^2$ 修正）：
 
-   $$ \ln S_T \sim \mathcal{N}\!\Big(\ln S + (r - q - \tfrac{1}{2}\sigma^2)\tau,\ \ \sigma^2\tau\Big) $$
+$$ \ln S_T \sim \mathcal{N}\!\Big(\ln S + (r - q - \tfrac{1}{2}\sigma^2)\tau,\ \ \sigma^2\tau\Big) $$
 
-3. **拆成两块**（赔付 = 拿到标的 − 付出行权价，仅在实值时）：
+**③ 拆成两块**（赔付 = 拿到标的 − 付出行权价，仅在实值时）：
 
-   $$ C = e^{-r\tau}\Big( \mathbb{E}^{Q}[S_T\,\mathbf{1}_{S_T>K}] - K\,\mathbb{E}^{Q}[\mathbf{1}_{S_T>K}] \Big) $$
+$$ C = e^{-r\tau}\Big( \mathbb{E}^{Q}[S_T\,\mathbf{1}_{S_T>K}] - K\,\mathbb{E}^{Q}[\mathbf{1}_{S_T>K}] \Big) $$
 
-4. **第二块** = 实值概率： $\mathbb{E}^{Q}[\mathbf{1}_{S_T>K}] = Q(S_T>K) = N(d_2)$ （把对数正态标准化即得 $d_2$ ）。
-5. **第一块** 含 $S_T$ 权重，做一次测度/变量变换得 $\mathbb{E}^{Q}[S_T\,\mathbf{1}_{S_T>K}] = S e^{(r-q)\tau} N(d_1)$ ；多出的 $\sigma^2$ 把 $d_2$ 抬成 $d_1 = d_2 + \sigma\sqrt{\tau}$ 。
-6. **代回整理** 即得 §3 的 Call 公式；Put 由 [平价公式](./01-平价公式.md) $C - P = S e^{-q\tau} - K e^{-r\tau}$ 直接得到。
+**④ 第二块** = 实值概率： $\mathbb{E}^{Q}[\mathbf{1}_{S_T>K}] = Q(S_T>K) = N(d_2)$ （把对数正态标准化即得 $d_2$ ）。
 
-> 注意第 2 步漂移里是 $-\tfrac{1}{2}\sigma^2$ ，而 $d_1$ 里是 $+\tfrac{1}{2}\sigma^2$ ——差别正来自第 5 步对 $S_T \mathbf{1}_{S_T>K}$ 求期望的测度变换，这就是 $d_1,\ d_2$ 同时出现的根源。
+**⑤ 第一块** 含 $S_T$ 权重，做一次测度/变量变换得 $\mathbb{E}^{Q}[S_T\,\mathbf{1}_{S_T>K}] = S e^{(r-q)\tau} N(d_1)$ ；多出的 $\sigma^2$ 把 $d_2$ 抬成 $d_1 = d_2 + \sigma\sqrt{\tau}$ 。
+
+**⑥ 代回整理** 即得 §3 的 Call 公式；Put 由 [平价公式](./01-平价公式.md) $C - P = S e^{-q\tau} - K e^{-r\tau}$ 直接得到。
+
+> 注意第 ② 步漂移里是 $-\tfrac{1}{2}\sigma^2$ ，而 $d_1$ 里是 $+\tfrac{1}{2}\sigma^2$ ——差别正来自第 ⑤ 步对 $S_T \mathbf{1}_{S_T>K}$ 求期望的测度变换，这就是 $d_1,\ d_2$ 同时出现的根源。
 
 **各项含义**： $N(d_2)$ = 风险中性下到期实值概率； $K e^{-r\tau} N(d_2)$ = 要付的行权价现值 ×（要付的概率）； $S e^{-q\tau} N(d_1)$ = 拿到标的的"风险调整"现值； $\sigma\sqrt{\tau}$ = 总波动量（ $d_1 - d_2$ ）。
 
