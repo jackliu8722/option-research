@@ -50,7 +50,7 @@ $$ \boxed{\;\mathbb{E}[d\Pi] \approx \tfrac{1}{2}\,\Gamma S^2\left(\sigma_{\text
 
 - **多头期权（ $\Gamma>0$ ）**：当 $\sigma_{\text{real}}>\sigma_{\text{imp}}$ → Delta 对冲后**净赚**；反之被 Theta 吃。
 - **空头期权（ $\Gamma<0$ ）**：当 $\sigma_{\text{real}}<\sigma_{\text{imp}}$ → 净赚（卖贵的 IV，实际没那么波动）。
-- 权重是**美元 Gamma**$\Gamma S^2$ ：ATM、临到期最大（[Gamma 篇](../02-希腊字母/02-Gamma.md)）。
+- 权重是**美元 Gamma** $\Gamma S^2$ ：ATM、临到期最大（[Gamma 篇](../02-希腊字母/02-Gamma.md)）。
 - 这就是 [Theta 篇"波动率对决"](../02-希腊字母/03-Theta.md) 的精确版，也是 [跨式](../06-组合策略/01-跨式与宽跨式.md) 等波动率策略的盈亏来源。
 
 ---
