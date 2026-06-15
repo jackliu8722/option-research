@@ -54,9 +54,9 @@ $$ \boxed{\ \text{Zomma} = \frac{\partial\Gamma}{\partial\sigma} = \Gamma\,\frac
 
 ## 4. Color：Gamma 随时间的衰减 `推导`
 
-$$ \text{Color} = \frac{\partial\Gamma}{\partial t} = -\,e^{-q\tau}\frac{n(d_1)}{2S\tau\sigma\sqrt{\tau}}\left[\,2q\tau+1+\frac{2(r-q)\tau - d_2\sigma\sqrt{\tau}}{\sigma\sqrt{\tau}}\,d_1\,\right] $$
+$$ \text{Color} = \frac{\partial\Gamma}{\partial t} = e^{-q\tau}\frac{n(d_1)}{2S\tau\sigma\sqrt{\tau}}\left[\,2q\tau+1+\frac{2(r-q)\tau - d_2\sigma\sqrt{\tau}}{\sigma\sqrt{\tau}}\,d_1\,\right] $$
 
-**直觉**：**Gamma 随到期临近怎么变**。ATM 临到期 Gamma 暴涨（[02/02](../02-希腊字母/02-Gamma.md)）——Color 就是这个"暴涨速度"，对**到期日附近的做市/0DTE**至关重要：你的 Gamma 一夜之间可能翻倍，对冲节奏要随之改。
+**直觉**：**Gamma 随到期临近怎么变**。ATM 临到期 Gamma 暴涨（[02/02](../02-希腊字母/02-Gamma.md)）——Color 就是这个"暴涨速度"（本例 ≈ **+3.4×10⁻⁵/年**，为正：时间流逝 Gamma 升），对**到期日附近的做市/0DTE**至关重要：你的 Gamma 一夜之间可能翻倍，对冲节奏要随之改。
 
 ---
 
@@ -65,7 +65,7 @@ $$ \text{Color} = \frac{\partial\Gamma}{\partial t} = -\,e^{-q\tau}\frac{n(d_1)}
 - **深虚/深实**（ $n(d_1)\to0$ ）：Speed/Zomma/Color 全 →0（Gamma 本身趋 0）。✓
 - **ATM 临到期**（ $\tau\to0$ ）：Color/Speed 发散——Gamma 又高又快变，最难对冲。✓
 - Zomma 在 $d_1 d_2=1$ 处变号。✓
-- 数值校验：Speed、Zomma 已用 [`tools/option_strategy.py`](../../tools/option_strategy.py) 有限差分复核（误差 <2%）。
+- 数值校验：Speed、Zomma、Color 均已用 [`tools/option_strategy.py`](../../tools/option_strategy.py) 有限差分（含 Richardson 外推）复核，闭式与数值吻合。
 
 ---
 
@@ -91,4 +91,4 @@ $$ \text{Color} = \frac{\partial\Gamma}{\partial t} = -\,e^{-q\tau}\frac{n(d_1)}
 
 ## 9. 参考来源
 - Speed/Zomma/Color 定义与 BSM 闭式属 `公认结论`（Hull / Taleb《Dynamic Hedging》/ Haug《Option Pricing Formulas》）。
-- Speed、Zomma 数值由 [`tools/option_strategy.py`](../../tools/option_strategy.py) 有限差分复核；Color 闭式为标准结果 `推导`。
+- Speed、Zomma、Color 闭式均由 [`tools/option_strategy.py`](../../tools/option_strategy.py) 有限差分复核（与数值吻合）`推导`。

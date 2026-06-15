@@ -71,7 +71,7 @@ $$ \text{Charm}_{\text{call}} = \frac{\partial \Delta}{\partial t} = e^{-q\tau}\
 
 ## 5. Veta：Vega 的时间衰减 `推导`
 
-$$ \text{Veta} = \frac{\partial \text{Vega}}{\partial t} = -\,S e^{-q\tau} n(d_1)\sqrt{\tau}\left[\,q + \frac{(r-q)d_1}{\sigma\sqrt{\tau}} - \frac{1+d_1 d_2}{2\tau}\,\right] $$
+$$ \text{Veta} = \frac{\partial \text{Vega}}{\partial t} = S e^{-q\tau} n(d_1)\sqrt{\tau}\left[\,q + \frac{(r-q)d_1}{\sigma\sqrt{\tau}} - \frac{1+d_1 d_2}{2\tau}\,\right] $$
 
 **直觉**：**Vega 也会随到期临近而缩水**（本例 ≈ −21,532/年）。长到期 Vega 大、临到期 Vega 塌——这正是 [日历价差](../06-组合策略/03-日历与对角价差.md) 押"近月 Vega 塌得比远月快"的来源。
 
