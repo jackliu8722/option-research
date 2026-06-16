@@ -155,6 +155,90 @@ def sabr_iv(F, K, tau, alpha, beta, rho, nu):
     return A * (z / x) * B
 
 
+def mc_price(S, K, tau, sigma, r=0.0, q=0.0, kind="call", paths=400000, seed=0):
+    """欧式期权蒙特卡洛价（对偶变量降方差），单步终值。见 docs/14/01。"""
+    import random
+    random.seed(seed)
+    disc = math.exp(-r * tau)
+    drift = (r - q - 0.5 * sigma * sigma) * tau
+    vol = sigma * math.sqrt(tau)
+    total = 0.0
+    n = 0
+    for _ in range(paths // 2):
+        z = random.gauss(0, 1)
+        for zz in (z, -z):  # 对偶变量
+            ST = S * math.exp(drift + vol * zz)
+            total += max(ST - K, 0.0) if kind == "call" else max(K - ST, 0.0)
+            n += 1
+    return disc * total / n
+
+
+def fd_price(S, K, tau, sigma, r=0.0, q=0.0, kind="call", Nx=400, Nt=400):
+    """欧式期权隐式有限差分价（对数网格 + Thomas 三对角）。见 docs/14/02。"""
+    import bisect
+    xmin = math.log(S) - 6 * sigma * math.sqrt(tau)
+    xmax = math.log(S) + 6 * sigma * math.sqrt(tau)
+    dx = (xmax - xmin) / Nx
+    dt = tau / Nt
+    x = [xmin + i * dx for i in range(Nx + 1)]
+    if kind == "call":
+        V = [max(math.exp(xi) - K, 0.0) for xi in x]
+    else:
+        V = [max(K - math.exp(xi), 0.0) for xi in x]
+    a = 0.5 * sigma * sigma
+    b = (r - q - 0.5 * sigma * sigma)
+    lo = -dt * (a / dx ** 2 - b / (2 * dx))
+    mid = 1 + dt * (2 * a / dx ** 2 + r)
+    up = -dt * (a / dx ** 2 + b / (2 * dx))
+    n = Nx
+    for _ in range(Nt):
+        d = V[:]
+        if kind == "call":
+            d[0] = 0.0
+            d[n] = math.exp(xmax) - K * math.exp(-r * dt)
+        else:
+            d[0] = K * math.exp(-r * dt) - math.exp(xmin)
+            d[n] = 0.0
+        A = [lo] * (n + 1)
+        B = [mid] * (n + 1)
+        C = [up] * (n + 1)
+        D = d[:]
+        A[0], B[0], C[0] = 0, 1, 0
+        A[n], B[n], C[n] = 0, 1, 0
+        for i in range(1, n + 1):
+            m = A[i] / B[i - 1]
+            B[i] -= m * C[i - 1]
+            D[i] -= m * D[i - 1]
+        V[n] = D[n] / B[n]
+        for i in range(n - 1, -1, -1):
+            V[i] = (D[i] - C[i] * V[i + 1]) / B[i]
+    j = bisect.bisect(x, math.log(S)) - 1
+    w = (math.log(S) - x[j]) / dx
+    return V[j] * (1 - w) + V[j + 1] * w
+
+
+def fourier_call(S, K, tau, sigma, r=0.0, q=0.0, n_int=4000, u_max=200.0):
+    """欧式 Call 的傅里叶价（Gil-Pelaez + BSM 特征函数）。见 docs/14/03。
+       换上别的特征函数即可给 Heston/Merton 等定价。"""
+    import cmath
+
+    def cf(u):  # ln S_T 的特征函数（BSM）
+        m = math.log(S) + (r - q - 0.5 * sigma * sigma) * tau
+        return cmath.exp(1j * u * m - 0.5 * u * u * sigma * sigma * tau)
+
+    lnK = math.log(K)
+    du = u_max / n_int
+    cf_mi = cf(-1j)
+    P1 = P2 = 0.0
+    for jj in range(1, n_int + 1):
+        u = (jj - 0.5) * du
+        P2 += (cmath.exp(-1j * u * lnK) * cf(u) / (1j * u)).real * du
+        P1 += (cmath.exp(-1j * u * lnK) * cf(u - 1j) / (1j * u * cf_mi)).real * du
+    P2 = 0.5 + P2 / math.pi
+    P1 = 0.5 + P1 / math.pi
+    return S * math.exp(-q * tau) * P1 - K * math.exp(-r * tau) * P2
+
+
 @dataclass
 class Leg:
     qty: int          # +多 / -空
