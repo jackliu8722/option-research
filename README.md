@@ -22,6 +22,7 @@
 | [08-进阶与量化](./docs/08-进阶与量化/) | 波动率交易(对冲PnL推导)、VRP、曲面建模、回测、数据 | ✅ |
 | [09-加密期权专题](./docs/09-加密期权专题/) | 币本位/反向、资金费率对冲、r、DVOL、交易所、链上、特有风险 | ✅ |
 | [10-高阶希腊字母与做市定位](./docs/10-高阶希腊字母与做市定位/) | Vanna/Volga/Charm/Veta、Speed/Zomma/Color、dealer gamma/GEX/钉价 | ✅ |
+| [11-高级定价模型](./docs/11-高级定价模型/) | 局部波动率/Dupire、随机波动率 Heston·SABR、跳跃 Merton·Bates | ✅ |
 
 ## 策略卡片库（strategies/）
 

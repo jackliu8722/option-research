@@ -117,6 +117,44 @@ def jump_mix_pdf(S0, mu, sigma, tau, lam, jump_mean, jump_sigma):
     return lambda ST: (1 - lam) * calm(ST) + lam * crash(ST)
 
 
+def merton_call(S, K, tau, sigma, r=0.0, q=0.0, lam=0.0,
+                jump_mean=0.0, jump_sigma=0.0, n_terms=60):
+    """Merton 跳跃扩散欧式 Call（泊松加权 BSM 和，见 docs/11/03）。
+       lam: 年均跳跃次数; jump_mean/jump_sigma: 单次跳跃对数均值/对数波动。
+       lam=0 精确退化为 bsm_price。"""
+    k = math.exp(jump_mean + 0.5 * jump_sigma * jump_sigma) - 1.0  # E[J]-1
+    total = 0.0
+    fact = 1.0
+    for n in range(n_terms):
+        if n > 0:
+            fact *= n
+        sig_n = math.sqrt(sigma * sigma + n * jump_sigma * jump_sigma / tau)
+        r_n = r - lam * k + n * (jump_mean + 0.5 * jump_sigma * jump_sigma) / tau
+        w = math.exp(-lam * tau) * (lam * tau) ** n / fact
+        total += w * bsm_price(S, K, tau, sig_n, r_n, q, "call")
+    return total
+
+
+def sabr_iv(F, K, tau, alpha, beta, rho, nu):
+    "SABR 隐含波动率的 Hagan(2002) 近似（见 docs/11/02）。"
+    if abs(F - K) < 1e-12:  # ATM
+        fb = F ** (1 - beta)
+        term = ((1 - beta) ** 2 / 24 * alpha * alpha / (F ** (2 - 2 * beta))
+                + rho * beta * nu * alpha / (4 * fb)
+                + (2 - 3 * rho * rho) * nu * nu / 24)
+        return alpha / fb * (1 + term * tau)
+    logFK = math.log(F / K)
+    fkb = (F * K) ** ((1 - beta) / 2)
+    z = nu / alpha * fkb * logFK
+    x = math.log((math.sqrt(1 - 2 * rho * z + z * z) + z - rho) / (1 - rho))
+    A = alpha / (fkb * (1 + (1 - beta) ** 2 / 24 * logFK ** 2
+                        + (1 - beta) ** 4 / 1920 * logFK ** 4))
+    B = 1 + ((1 - beta) ** 2 / 24 * alpha * alpha / (fkb * fkb)
+             + rho * beta * nu * alpha / (4 * fkb)
+             + (2 - 3 * rho * rho) * nu * nu / 24) * tau
+    return A * (z / x) * B
+
+
 @dataclass
 class Leg:
     qty: int          # +多 / -空
