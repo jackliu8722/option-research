@@ -54,7 +54,7 @@ $$ d\Pi \approx \tfrac{1}{2}\Gamma\,(dS)^2 - \tfrac{1}{2}\sigma_{\text{imp}}^2 S
 
 由于 $\mathbb{E}\!\left[(dS/S)^2\right]=\sigma_{\text{real}}^2\,dt$ ，取期望得**核心公式**：
 
-$$ \boxed{\;\mathbb{E}[d\Pi] \approx \tfrac{1}{2}\,\Gamma S^2\left(\sigma_{\text{real}}^2 - \sigma_{\text{imp}}^2\right)dt\;} $$
+$$ \boxed{\ \mathbb{E}[d\Pi] \approx \tfrac{1}{2}\,\Gamma S^2\left(\sigma_{\text{real}}^2 - \sigma_{\text{imp}}^2\right)dt\ } $$
 
 ---
 
@@ -81,13 +81,13 @@ $$ \boxed{\;\mathbb{E}[d\Pi] \approx \tfrac{1}{2}\,\Gamma S^2\left(\sigma_{\text
 
 $$ \Gamma S^2 = 1.606\times10^{-5}\times 60{,}000^2 \approx 57{,}815 $$
 
-设隐含 $\sigma_{\text{imp}}=80\%$ ，而实际跑出 $\sigma_{\text{real}}=100\%$ 。Delta 对冲后的**年化**期望盈亏：
+设隐含 $\sigma_{\text{imp}}$ = 80% ，而实际跑出 $\sigma_{\text{real}}$ = 100% 。Delta 对冲后的**年化**期望盈亏：
 
 $$ \tfrac{1}{2}\,\Gamma S^2(\sigma_{\text{real}}^2-\sigma_{\text{imp}}^2) = \tfrac{1}{2}\times57{,}815\times(1.00-0.64) \approx 10{,}407\ (\text{per year}) $$
 
 - 折每日 ≈ \$28.5/天：**方向已对冲，这 \$28.5 纯粹来自"实际波动 100% > 隐含 80%"**。
-- 若反过来 $\sigma_{\text{real}}=60\%<80\%$ ：同式得负值，多头被 Theta 吃、空头赚。
-- 校验：当 $\sigma_{\text{real}}=\sigma_{\text{imp}}=80\%$ 时该式 =0，与 [Theta 篇](../02-希腊字母/03-Theta.md) 的"隐含日波动 \$2,513 即盈亏平衡"一致。✓
+- 若反过来 $\sigma_{\text{real}}$ = 60% < 80% ：同式得负值，多头被 Theta 吃、空头赚。
+- 校验：当 $\sigma_{\text{real}}=\sigma_{\text{imp}}$ 且都为 80% 时该式 =0，与 [Theta 篇](../02-希腊字母/03-Theta.md) 的"隐含日波动 \$2,513 即盈亏平衡"一致。✓
 
 > 可用 [`tools/option_strategy.py`](../../tools/option_strategy.py) 的 `expected_pnl` 复算不同 $\sigma_{\text{real}}$ 下的对冲盈亏。
 

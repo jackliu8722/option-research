@@ -29,7 +29,9 @@ updated: 2026-06-15
 
 **Rho（ρ）= 无风险利率变动 1 个百分点时，期权价格的变动量。**
 
-$$ \rho = \frac{\partial V}{\partial r}\quad(\text{per 1\% rate}) $$
+$$ \rho = \frac{\partial V}{\partial r} $$
+
+（per 1% rate：每 1 个百分点的利率变动。）
 
 - **Call 的 ρ > 0**：`r` 升 → 远期 $F=S e^{(r-q)\tau}$ 升 → 利好 Call。
 - **Put 的 ρ < 0**：`r` 升利空 Put。
@@ -91,7 +93,9 @@ $$ \boxed{\ \rho_{\text{call}} = K\,\tau\,e^{-r\tau}\,N(d_2),\qquad \rho_{\text{
 
 沿用 [BSM 算例](../03-定价模型/03-BSM模型.md)：`S=60,000`、`K=60,000`、`τ=0.25`、`σ=80%`、`r=10%`、`q=0`， $N(d_2)=0.4453$ 。
 
-$$ \rho_{\text{call}} = 60{,}000\times0.25\times e^{-0.025}\times0.4453 \approx 6{,}515\ (\text{per }1.0) \;\Rightarrow\; \mathbf{65.1}\ \text{USD/1\%} $$
+$$ \rho_{\text{call}} = 60{,}000\times0.25\times e^{-0.025}\times0.4453 \approx 6{,}515 $$
+
+（per 1.0；每 1% 利率即 ÷100 ≈ **\$65.1**。）
 
 （Put： $\rho_{\text{put}} = -60{,}000\times0.25\times e^{-0.025}\times0.5547 \approx -81.1$ ，即 −\$81.1/1%。）
 

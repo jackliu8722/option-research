@@ -53,7 +53,7 @@ $$ \Theta = \frac{\partial V}{\partial t}\quad(\text{per day}) $$
 
 **闭式（per year，Call）** `公认结论`：
 
-$$ \Theta_{\text{call}} = -\,\frac{S e^{-q\tau} n(d_1)\,\sigma}{2\sqrt{\tau}} \;-\; r K e^{-r\tau} N(d_2) \;+\; q S e^{-q\tau} N(d_1) $$
+$$ \Theta_{\text{call}} = -\,\frac{S e^{-q\tau} n(d_1)\,\sigma}{2\sqrt{\tau}} \ -\  r K e^{-r\tau} N(d_2) \ +\  q S e^{-q\tau} N(d_1) $$
 
 三项依次为：**时间价值衰减**（恒负、与 Gamma 同源）、**行权价折现的利息**、**持有收益**。除以 365 得每日 Θ。
 
@@ -89,7 +89,7 @@ $$ \boxed{\ \Theta \approx -\tfrac{1}{2}\,\sigma^2 S^2\,\Gamma\ } $$
 
 把 [Gamma 凸性收益 ½Γ(ΔS)²](./02-Gamma.md) 和每天的 Theta 租金放一起，多头 Gamma 仓位每天的盈亏大致是：
 
-$$ \text{PnL}_{\text{day}} \approx \underbrace{\tfrac{1}{2}\Gamma(\Delta S)^2}_{\text{realized move}} \;-\; \underbrace{|\Theta|}_{\text{theta rent}} $$
+$$ \text{PnL}_{\text{day}} \approx \underbrace{\tfrac{1}{2}\Gamma(\Delta S)^2}_{\text{realized move}} \ -\  \underbrace{|\Theta|}_{\text{theta rent}} $$
 
 令两者相等，解出**盈亏平衡的日波动**（用 §4 的对偶关系，平衡点正是隐含日波动）：
 

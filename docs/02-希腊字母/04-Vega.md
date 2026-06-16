@@ -29,7 +29,9 @@ updated: 2026-06-15
 
 **Vega（𝒱）= 隐含波动率变动 1 个百分点时，期权价格的变动量。**
 
-$$ \mathcal{V} = \frac{\partial V}{\partial \sigma}\quad(\text{per 1\% vol}) $$
+$$ \mathcal{V} = \frac{\partial V}{\partial \sigma} $$
+
+（per 1% vol：每 1 个百分点的 IV 变动。）
 
 - **买入期权（long call / long put）→ Vega 为正**：IV 升值钱、IV 跌亏钱（Call/Put 同号）。
 - **卖出期权 → Vega 为负**。

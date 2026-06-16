@@ -43,7 +43,7 @@ updated: 2026-06-15
 
 由此得到 **CBOE 的模型无关公式**：
 
-$$ \sigma^2 = \frac{2}{\tau}\sum_i \frac{\Delta K_i}{K_i^{2}}\,e^{r\tau}\,Q(K_i) \;-\; \frac{1}{\tau}\left(\frac{F}{K_0}-1\right)^{2} $$
+$$ \sigma^2 = \frac{2}{\tau}\sum_i \frac{\Delta K_i}{K_i^{2}}\,e^{r\tau}\,Q(K_i) \ -\  \frac{1}{\tau}\left(\frac{F}{K_0}-1\right)^{2} $$
 
 - $Q(K_i)$ ：行权价 $K_i$ 处的 **OTM 期权价**（低于 $F$ 用 Put、高于用 Call）。
 - $\Delta K_i$ ：相邻行权价间距； $K_0$ ：略低于远期 $F$ 的行权价。
