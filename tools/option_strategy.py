@@ -123,6 +123,7 @@ def merton_call(S, K, tau, sigma, r=0.0, q=0.0, lam=0.0,
        lam: 年均跳跃次数; jump_mean/jump_sigma: 单次跳跃对数均值/对数波动。
        lam=0 精确退化为 bsm_price。"""
     k = math.exp(jump_mean + 0.5 * jump_sigma * jump_sigma) - 1.0  # E[J]-1
+    lam_p = lam * (1.0 + k)   # 泊松权重用 λ'=λ(1+k)（标准 Merton/Hull 形式）
     total = 0.0
     fact = 1.0
     for n in range(n_terms):
@@ -130,7 +131,7 @@ def merton_call(S, K, tau, sigma, r=0.0, q=0.0, lam=0.0,
             fact *= n
         sig_n = math.sqrt(sigma * sigma + n * jump_sigma * jump_sigma / tau)
         r_n = r - lam * k + n * (jump_mean + 0.5 * jump_sigma * jump_sigma) / tau
-        w = math.exp(-lam * tau) * (lam * tau) ** n / fact
+        w = math.exp(-lam_p * tau) * (lam_p * tau) ** n / fact
         total += w * bsm_price(S, K, tau, sig_n, r_n, q, "call")
     return total
 
