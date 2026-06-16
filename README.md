@@ -24,6 +24,7 @@
 | [10-高阶希腊字母与做市定位](./docs/10-高阶希腊字母与做市定位/) | Vanna/Volga/Charm/Veta、Speed/Zomma/Color、dealer gamma/GEX/钉价 | ✅ |
 | [11-高级定价模型](./docs/11-高级定价模型/) | 局部波动率/Dupire、随机波动率 Heston·SABR、跳跃 Merton·Bates | ✅ |
 | [12-奇异期权](./docs/12-奇异期权/) | 二元/数字、障碍(敲入敲出)、亚式/回望（路径依赖） | ✅ |
+| [13-结构化产品](./docs/13-结构化产品/) | 双币理财DCI、雪球/Autocall、鲨鱼鳍/保本票据（=债券+期权拆解） | ✅ |
 
 ## 策略卡片库（strategies/）
 
